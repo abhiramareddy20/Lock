@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Locck</string>
+
+    <string name="dialog_title">QUOTATION</string>
+    <string name="dialog_message"> Term 1 : jadhbjhbda jdbkjab kjjdbka kjdbckjba
+    kjsdbkd kjdbkj kjdbjk kjdck kjdcn kjdjc jdncn dnckj \n \n
+    Term 2: jadja abckan lans LKNSN KAJSCN JC ksdjvka akdjcndal acnalcalc acnanc \n \n
+    Term 3: ahbkajbjclnacl kacbnlakncla lanclnacla kackaca kajnckjnackj kabckjna \n \n
+    Term 4: huv jhvbjbs sjbjsb nsbvjsb skbjsb sjbjksb sbskjb vkvjf fvkjbnk vnbdd \n \n
+    Term 5 : kjdbckj kdjbac kjdv vkdjvksv vdksjsvn vkjsvsvn vskjdvnjkdsvn dsvkjd \n \n
+
+    </string>
+
+    <string name="descreption">
+     huv jhvbjbs sjbjsb nsbvjsb skbjsb sjbjksb sbskjb vkvjf fvkjbnk vnbdd
+     kjdbckj kdjbac kjdv vkdjvksv vdksjsvn vkjsvsvn vskjdvnjkdsvn dsvkjd \n \n
+    </string>
+
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+
+    <string name="Rateus">HOW MUCH YOU WILL RATE FOR OUR SERVICE?</string>
+    <string name="title_activity_maps">Map</string>
+
+
+    <string name="tracking_enabled_notif">Tracking is currently enabled. Tap to cancel.</string>
+    <string name="test_email">test@test.com</string>
+    <string name="test_password">testpassword</string>
+    <string name="firebase_path">location</string>
+</resources>

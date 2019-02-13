@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Background"
+    android:orientation="vertical"
+    tools:context=".Pay_Half">
+
+
+    <TextView
+        android:id="@+id/payment"
+        android:textAlignment="center"
+        android:textSize="30dp"
+        android:layout_marginTop="300dp"
+        android:text="Payment gateway for 20% payment"
+        android:textColor="@color/White"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
+
+
+    <Button
+        android:id="@+id/pDone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/Button"
+        android:text="Payment Done"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:textColor="@color/White"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_vertical"/>
+
+</RelativeLayout>
