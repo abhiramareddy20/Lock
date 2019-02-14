@@ -2,6 +2,7 @@ package com.example.locck;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,6 +25,8 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import java.util.concurrent.TimeUnit;
 
 public class Login extends AppCompatActivity {
+
+
 
     private FirebaseAuth mAuth;
     private ProgressDialog loadingbar;
@@ -161,6 +164,8 @@ public class Login extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                                 loadingbar.dismiss ();
+
+
                             Toast.makeText (Login.this, "Congratulation , You are successfully Logged In", Toast.LENGTH_SHORT).show ();
                             sendUserToHomePage();
                         }
@@ -175,6 +180,8 @@ public class Login extends AppCompatActivity {
                     }
                 });
     }
+
+
 
     private void sendUserToHomePage() {
         Intent intent = new Intent (Login.this,Dashboard.class);

@@ -7,6 +7,50 @@
     android:background="@color/Background"
     tools:context=".Dashboard">
 
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:text="lat"
+        android:layout_below="@id/latlong"
+        android:textColor="@color/White"
+        android:textSize="30dp"
+        android:gravity="center"
+        android:id="@+id/city"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:text="lat"
+        android:textColor="@color/White"
+        android:textSize="30dp"
+        android:gravity="center"
+        android:id="@+id/latlong"/>
+
+    <EditText
+        android:id="@+id/landmark"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_below="@id/city"
+        android:hint="Please enter landmark"
+        android:textColorHint="@color/Black"
+        android:gravity="center"
+        android:background="@drawable/rounded_input"/>
+
+    <Button
+        android:id="@+id/upload"
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/landmark"
+        android:background="@color/Button"
+        android:text="Upload address"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="30dp"
