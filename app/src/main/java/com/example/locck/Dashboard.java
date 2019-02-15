@@ -48,7 +48,7 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
     protected LocationManager locationManager;
     protected LocationListener locationListener;
     protected Context context;
-    TextView txtLat, city;
+    TextView txtLat, city,you_are_here;;
     String lat;
     String provider;
     protected double latitude, longitude;
@@ -63,7 +63,7 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
     Button btn;
     EditText userLandmark;
     private Geocoder geocoder;
-    private  List<Address> addresses;
+    private  String address;
 
     @SuppressLint("WrongConstant")
     @Override
@@ -83,6 +83,7 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
 
 
 
+        you_are_here = (TextView)findViewById (R.id.here);
         btn = (Button) findViewById (R.id.upload);
         txtLat = (TextView) findViewById (R.id.latlong);
         userLandmark = (EditText)findViewById (R.id.landmark);
@@ -92,27 +93,29 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
             public void onClick(View view) {
 
                 String landmark = userLandmark.getText ().toString ().trim ();
+                String addres = address;
+
 
                 if(TextUtils.isEmpty (landmark))
                 {
                     Toast.makeText (Dashboard.this, "Please Enter The landmark To continue", Toast.LENGTH_SHORT).show ();
                 }else {
 
-                    User_address user_address = new User_address (landmark);
+                    txtLat.setVisibility (View.INVISIBLE);
+                    userLandmark.setVisibility (View.INVISIBLE);
+                    btn.setVisibility (View.INVISIBLE);
+                    you_are_here.setVisibility (View.INVISIBLE);
+
+                    User_address user_address = new User_address (landmark,addres);
                     FirebaseUser user = mAuth.getCurrentUser ();
 
                     myref.child (user.getUid ()).setValue (user_address);
-                    //myref.child (user.getUid ()).setValue (txtLat);
+
                     Toast.makeText (Dashboard.this, "Address Saved", Toast.LENGTH_SHORT).show ();
 
 
                 }
 
-
-
-
-                /*Intent i = new Intent (Dashboard.this, Start_Activity.class);
-                startActivity (i);*/
             }
         });
 
@@ -196,7 +199,7 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
 
-
+        List<Address> addresses;
 
         geocoder = new Geocoder(this, Locale.getDefault());
 
@@ -211,7 +214,7 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
 
 
             if (addresses != null && addresses.size() > 0) {
-                String address = addresses.get(0).getAddressLine(0);
+                 address = addresses.get(0).getAddressLine(0);
                 //String city = addresses.get(0).getLocality();
                 //String state = addresses.get(0).getAdminArea();
                 //String country = addresses.get(0).getCountryName();
@@ -248,7 +251,7 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
         Log.d("Latitude","disable");
     }
 
-   
+
     /*Exit Button*/
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
