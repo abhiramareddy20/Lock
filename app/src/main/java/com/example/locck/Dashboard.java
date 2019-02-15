@@ -71,6 +71,8 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
         super.onCreate (savedInstanceState);
         setContentView (R.layout.activity_dashboard);
 
+        fetchLocationData();
+
         // Write a message to the database
         mAuth = FirebaseAuth.getInstance ();
         user = mAuth.getCurrentUser ().getUid ();
@@ -87,6 +89,7 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
         btn = (Button) findViewById (R.id.upload);
         txtLat = (TextView) findViewById (R.id.latlong);
         userLandmark = (EditText)findViewById (R.id.landmark);
+        loadingbar = new ProgressDialog (this);
 
         btn.setOnClickListener (new View.OnClickListener () {
             @Override
@@ -253,41 +256,53 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
     }
 
 
-    /*Exit Button*/
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            exitByBackKey();
 
-            //moveTaskToBack(false);
 
-            return true;
+    public void fetchLocationData()
+    {
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        boolean statusOfGPS = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (!statusOfGPS) {
+            Intent gpsOptionsIntent = new Intent(
+                    android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(gpsOptionsIntent);
         }
-        return super.onKeyDown(keyCode, event);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_LOCATION);
+
+            return;
+        }Toast.makeText(this,"Location is triggered from here acc",Toast.LENGTH_SHORT).show();
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 1, this);
     }
 
-    protected void exitByBackKey() {
-
-        AlertDialog alertbox = new AlertDialog.Builder(this)
-                .setMessage("Do you want to exit application?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-
-                    // do something when the button is clicked
-                    public void onClick(DialogInterface arg0, int arg1) {
-
-                        finish();
-                        //close();
-
-
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-
-                    // do something when the button is clicked
-                    public void onClick(DialogInterface arg0, int arg1) {
-                    }
-                })
-                .show();
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                Intent gpsOptionsIntent = new Intent(
+                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(gpsOptionsIntent);
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                Toast.makeText(this,"Toast call is triggered from abc",Toast.LENGTH_SHORT).show();
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+            }
+        }
     }
+
+
 
 }
 
