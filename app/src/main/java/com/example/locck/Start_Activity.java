@@ -55,11 +55,13 @@ public class Start_Activity extends AppCompatActivity {
         UploadPic = (Button) findViewById (R.id.button);
         update = (Button)findViewById (R.id.Update);
 
-        /*mAuth = FirebaseAuth.getInstance ();
+        loadingBar = new ProgressDialog (this);
+
+        mAuth = FirebaseAuth.getInstance ();
         currentUserID = mAuth.getCurrentUser ().getUid ();
-        RootRef = FirebaseDatabase.getInstance ().getReference ();
+        /*RootRef = FirebaseDatabase.getInstance ().getReference ();
         UsersRef = FirebaseDatabase.getInstance ().getReference ().child ("Users");*/
-        PostImagesRef = FirebaseStorage.getInstance ().getReference ().child ("Profile Images");
+        PostImagesRef = FirebaseStorage.getInstance ().getReference ().child ("Loksmith Images");
 
 
         img.setOnClickListener (new View.OnClickListener () {
@@ -89,9 +91,12 @@ public class Start_Activity extends AppCompatActivity {
                 Toast.makeText (this, "Please Take the photo first", Toast.LENGTH_SHORT).show ();
 
             }else{
+                loadingBar.setTitle ("Uploading Photo");
+                loadingBar.setMessage ("Please wait, while we Upload Photo");
+                loadingBar.setCanceledOnTouchOutside (false);
+                loadingBar.show ();
                 StoringImageToFirebase();
             }
-
     }
 
     private void StoringImageToFirebase() {
@@ -106,12 +111,13 @@ public class Start_Activity extends AppCompatActivity {
 
         postRandomName = saveCurrentDate + saveCurrentTime;
 
-        StorageReference Filepath =PostImagesRef.child ("Camera picture").child ( ImageUri.getLastPathSegment () + postRandomName );
+        StorageReference Filepath =PostImagesRef.child ("Camera picture").child ( currentUserID + ImageUri.getLastPathSegment () + postRandomName + ".jpg");
 
         Filepath.putFile (ImageUri).addOnCompleteListener (new OnCompleteListener<UploadTask.TaskSnapshot> () {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                 if(task.isSuccessful ()){
+                    loadingBar.dismiss ();
                     Toast.makeText (Start_Activity.this, "Image Uploaded Successfully ", Toast.LENGTH_SHORT).show ();
                     Intent intent = new Intent (Start_Activity.this,Rating_activity.class);
                     startActivity (intent);
@@ -131,80 +137,14 @@ public class Start_Activity extends AppCompatActivity {
 
         if(requestCode == GALLERY_PICK && resultCode ==RESULT_OK && data!=null)
         {
-
                  ImageUri =data.getData ();
                 img.setImageURI (ImageUri);
-
-
         }
-
 
     }
 }
 
-        /*if (requestCode==CAMERA_REQUEST_CODE && resultCode==RESULT_OK && data!=null){
-            Uri ImageUri = data.getData();
 
-            CropImage.activity()
-                    .setGuidelines(CropImageView.Guidelines.ON)
-                    .setAspectRatio(1,1)
-                    .start(this);
-
-        }
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-
-            if(resultCode == RESULT_OK){
-
-                loadingBar.setTitle("set profile image");
-                loadingBar.setMessage("Please wait your image is updating...");
-                loadingBar.setCanceledOnTouchOutside(false);
-                loadingBar.show();
-
-                Uri resultUri = result.getUri();
-
-
-                StorageReference filePath = UserProfileImagesRef.child(currentUserID + ".jpg");
-                filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot> () {
-                    @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                        if (task.isSuccessful()){
-                            Toast.makeText(Start_Activity.this, "Profile Image uploaded successfully", Toast.LENGTH_SHORT).show();
-
-                            String downloadUrl = task.getResult().getDownloadUrl().toString();
-
-                            RootRef.child("Users").child(currentUserID).child("image")
-                                    .setValue(downloadUrl)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-
-                                            if(task.isSuccessful()){
-                                                Toast.makeText(Start_Activity.this, "Image Saved in database", Toast.LENGTH_SHORT).show();
-                                                loadingBar.dismiss();
-
-                                            }else{
-                                                String message = task.getException().toString();
-                                                Toast.makeText(Start_Activity.this, "Error :" + message, Toast.LENGTH_SHORT).show();
-                                                loadingBar.dismiss();
-                                            }
-
-                                        }
-                                    });
-                        }else{
-                            String message = task.getException().toString();
-                            Toast.makeText(Start_Activity.this, "Error :" + message, Toast.LENGTH_SHORT).show();
-                            loadingBar.dismiss();
-
-                        }
-
-                    }
-                });
-            }
-
-        }
-    }
-*/
 
 
 

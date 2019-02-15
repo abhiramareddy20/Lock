@@ -1,6 +1,7 @@
 package com.example.locck;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Address;
+import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
@@ -19,8 +21,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,6 +34,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 public class Dashboard extends AppCompatActivity implements LocationListener {
 
@@ -46,18 +51,27 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
     private ProgressDialog loadingbar;
     LinearLayout l1, l2, l3;
     ImageView i1, i2, i3;
+    Button btn;
 
+    @SuppressLint("WrongConstant")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate (savedInstanceState);
         setContentView (R.layout.activity_dashboard);
 
-        city = (TextView) findViewById (R.id.city);
+        btn = (Button) findViewById (R.id.upload);
         txtLat = (TextView) findViewById (R.id.latlong);
 
+        btn.setOnClickListener (new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent (Dashboard.this, Start_Activity.class);
+                startActivity (i);
+            }
+        });
 
 
-        locationManager = (LocationManager) getSystemService (Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) getSystemService (LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission (this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission (this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -68,7 +82,26 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        locationManager.requestLocationUpdates (LocationManager.GPS_PROVIDER, 0, 0, this);
+        locationManager.requestLocationUpdates (LocationManager.GPS_PROVIDER, 30000, 0, this);
+
+
+
+
+        Criteria criteria = new Criteria ();
+        String bestProvider = locationManager.getBestProvider(criteria, true);
+        Location location = locationManager.getLastKnownLocation(bestProvider);
+
+        if (location == null) {
+            Toast.makeText(getApplicationContext(), "GPS signal not found",
+                    3000).show();
+        }
+        if (location != null) {
+            Log.e("locatin", "location--" + location);
+
+            Log.e("latitude at beginning",
+                    "@@@@@@@@@@@@@@@" + location.getLatitude());
+            onLocationChanged(location);
+        }
 
 
 
@@ -108,8 +141,6 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
             }
         });
 
-        /*fetchLocationData ();*/
-
 
 
     }
@@ -119,8 +150,35 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
     public void onLocationChanged(Location location) {
 
 
-        txtLat = (TextView) findViewById(R.id.latlong);
-        txtLat.setText("Latitude:" + location.getLatitude() + ", Longitude:" + location.getLongitude());
+        Geocoder geocoder;
+        List<Address> addresses;
+        geocoder = new Geocoder(this, Locale.getDefault());
+
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
+
+        Log.e("latitude", "latitude--" + latitude);
+
+        try {
+            Log.e("latitude", "inside latitude--" + latitude);
+            addresses = geocoder.getFromLocation(latitude, longitude, 1);
+
+
+            if (addresses != null && addresses.size() > 0) {
+                String address = addresses.get(0).getAddressLine(0);
+                String city = addresses.get(0).getLocality();
+                String state = addresses.get(0).getAdminArea();
+                //String country = addresses.get(0).getCountryName();
+                String postalCode = addresses.get(0).getPostalCode();
+                String knownName = addresses.get(0).getFeatureName();
+
+                txtLat.setText(address + " " + city + " " );
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
 
     }
 
@@ -142,86 +200,69 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
         Log.d("Latitude","disable");
     }
 
+    @SuppressLint("LongLogTag")
+    private String getCompleteAddressString(double LATITUDE, double LONGITUDE) {
+        String strAdd = "";
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(LATITUDE, LONGITUDE, 1);
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder("");
+
+                for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                }
+                strAdd = strReturnedAddress.toString();
+                city.setText ("My Current loction address" + strAdd );
+            } else {
+                Log.w("My Current loction address", "No Address returned!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.w("My Current loction address", "Canont get Address!");
+        }
+        return strAdd;
+    }
+
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            exitByBackKey();
+
+            //moveTaskToBack(false);
+
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    protected void exitByBackKey() {
+
+        AlertDialog alertbox = new AlertDialog.Builder(this)
+                .setMessage("Do you want to exit application?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                    // do something when the button is clicked
+                    public void onClick(DialogInterface arg0, int arg1) {
+
+                        finish();
+                        //close();
+
+
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+                    // do something when the button is clicked
+                    public void onClick(DialogInterface arg0, int arg1) {
+                    }
+                })
+                .show();
+
+    }
 
 }
 
 
 
-    /*LocationManager locationManager;
-    public void fetchLocationData()
-    {
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        boolean statusOfGPS = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        if (!statusOfGPS) {
-            Intent gpsOptionsIntent = new Intent(
-                    android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(gpsOptionsIntent);
-        }
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
-                    MY_PERMISSIONS_REQUEST_LOCATION);
-
-            return;
-        }
-        Toast.makeText(this,"Location is triggered from here acc",Toast.LENGTH_SHORT).show();
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_LOCATION: {
-                Intent gpsOptionsIntent = new Intent(
-                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivity(gpsOptionsIntent);
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
-                Toast.makeText(this,"Toast call is triggered from abc",Toast.LENGTH_SHORT).show();
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-            }
-        }
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-        loadingbar.setTitle ("Please Wait");
-        loadingbar.setMessage ("Please wait, while we authenticate your location");
-        loadingbar.setCanceledOnTouchOutside (false);
-        loadingbar.show ();
-
-        Toast.makeText (this,"location recieved"+location.getLatitude ()+","+location.getLongitude (),Toast.LENGTH_LONG).show();
-        Log.e ("Location fetched","fetched");
-        LatLng mPyos=new LatLng (location.getLatitude(),location.getLongitude());
-
-
-    }
-
-    @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
-        Toast.makeText (this,"Location status changed",Toast.LENGTH_LONG).show();
-
-    }
-
-    @Override
-    public void onProviderEnabled(String s) {
-        Toast.makeText (this,"provider enabled",Toast.LENGTH_LONG).show();
-
-    }
-
-    @Override
-    public void onProviderDisabled(String s) {
-        Toast.makeText (this,"Location disabled",Toast.LENGTH_LONG).show();
-    }*/
 

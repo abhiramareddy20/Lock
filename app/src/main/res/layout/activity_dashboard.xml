@@ -8,20 +8,21 @@
     tools:context=".Dashboard">
 
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:text="lat"
-        android:layout_below="@id/latlong"
-        android:textColor="@color/White"
-        android:textSize="30dp"
-        android:gravity="center"
-        android:id="@+id/city"/>
+
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
+        android:text="You are Here"
+        android:textColor="@color/White"
+        android:gravity="center"
+        android:id="@+id/text"
+        android:layout_marginTop="20dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
         android:text="lat"
+        android:layout_below="@id/text"
         android:textColor="@color/White"
         android:textSize="30dp"
         android:gravity="center"
@@ -34,7 +35,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
-        android:layout_below="@id/city"
+        android:layout_below="@id/latlong"
         android:hint="Please enter landmark"
         android:textColorHint="@color/Black"
         android:gravity="center"
