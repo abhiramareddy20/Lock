@@ -20,17 +20,23 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 import java.util.List;
@@ -47,11 +53,17 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
     String provider;
     protected double latitude, longitude;
     protected boolean gps_enabled, network_enabled;
+    private FirebaseAuth mAuth;
+    private String user;
+    private DatabaseReference myref;
 
     private ProgressDialog loadingbar;
     LinearLayout l1, l2, l3;
     ImageView i1, i2, i3;
     Button btn;
+    EditText userLandmark;
+    private Geocoder geocoder;
+    private  List<Address> addresses;
 
     @SuppressLint("WrongConstant")
     @Override
@@ -59,14 +71,48 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
         super.onCreate (savedInstanceState);
         setContentView (R.layout.activity_dashboard);
 
+        // Write a message to the database
+        mAuth = FirebaseAuth.getInstance ();
+        user = mAuth.getCurrentUser ().getUid ();
+        myref = FirebaseDatabase.getInstance ().getReference ();
+
+        if(mAuth.getCurrentUser ()== null){
+            finish ();;
+            startActivity (new Intent (this,Login.class));
+        }
+
+
+
         btn = (Button) findViewById (R.id.upload);
         txtLat = (TextView) findViewById (R.id.latlong);
+        userLandmark = (EditText)findViewById (R.id.landmark);
 
         btn.setOnClickListener (new View.OnClickListener () {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent (Dashboard.this, Start_Activity.class);
-                startActivity (i);
+
+                String landmark = userLandmark.getText ().toString ().trim ();
+
+                if(TextUtils.isEmpty (landmark))
+                {
+                    Toast.makeText (Dashboard.this, "Please Enter The landmark To continue", Toast.LENGTH_SHORT).show ();
+                }else {
+
+                    User_address user_address = new User_address (landmark);
+                    FirebaseUser user = mAuth.getCurrentUser ();
+
+                    myref.child (user.getUid ()).setValue (user_address);
+                    //myref.child (user.getUid ()).setValue (txtLat);
+                    Toast.makeText (Dashboard.this, "Address Saved", Toast.LENGTH_SHORT).show ();
+
+
+                }
+
+
+
+
+                /*Intent i = new Intent (Dashboard.this, Start_Activity.class);
+                startActivity (i);*/
             }
         });
 
@@ -135,6 +181,7 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
         l3.setOnClickListener (new View.OnClickListener () {
             @Override
             public void onClick(View view) {
+
                 Intent intent = new Intent (Dashboard.this, Book.class);
                 intent.putExtra ("image", R.drawable.locktype3);
                 startActivity (intent);
@@ -150,8 +197,7 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
     public void onLocationChanged(Location location) {
 
 
-        Geocoder geocoder;
-        List<Address> addresses;
+
         geocoder = new Geocoder(this, Locale.getDefault());
 
         latitude = location.getLatitude();
@@ -166,13 +212,15 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
 
             if (addresses != null && addresses.size() > 0) {
                 String address = addresses.get(0).getAddressLine(0);
-                String city = addresses.get(0).getLocality();
-                String state = addresses.get(0).getAdminArea();
+                //String city = addresses.get(0).getLocality();
+                //String state = addresses.get(0).getAdminArea();
                 //String country = addresses.get(0).getCountryName();
-                String postalCode = addresses.get(0).getPostalCode();
-                String knownName = addresses.get(0).getFeatureName();
+                //String postalCode = addresses.get(0).getPostalCode();
+                //String knownName = addresses.get(0).getFeatureName();
 
-                txtLat.setText(address + " " + city + " " );
+
+                txtLat.setText(address + " " /*+ city + " " */);
+
             }
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -200,7 +248,7 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
         Log.d("Latitude","disable");
     }
 
-    @SuppressLint("LongLogTag")
+    /*@SuppressLint("LongLogTag")
     private String getCompleteAddressString(double LATITUDE, double LONGITUDE) {
         String strAdd = "";
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
@@ -223,7 +271,7 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
             Log.w("My Current loction address", "Canont get Address!");
         }
         return strAdd;
-    }
+    }*/
 
     /*Exit Button*/
     public boolean onKeyDown(int keyCode, KeyEvent event) {
