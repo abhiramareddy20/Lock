@@ -45,13 +45,14 @@ public class Rating_activity extends AppCompatActivity {
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
 
 
-                final DatabaseReference dbRef = FirebaseDatabase.getInstance ().getReference ()
+                final DatabaseReference dbRef = FirebaseDatabase.getInstance ().getReference ("Users")
                         .child (user).child ("Rating");
 
                 double dbRating = v;
                 dbRef.setValue (dbRating);
                 submitRating ();
                 Toast.makeText (Rating_activity.this, "You rated" + v, Toast.LENGTH_SHORT).show ();
+                finish ();
 
             }
         });
@@ -62,7 +63,7 @@ public class Rating_activity extends AppCompatActivity {
 
     private void submitRating() {
 
-            final DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+            final DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("Users");
 
             dbRef.addValueEventListener(new ValueEventListener () {
                 @Override

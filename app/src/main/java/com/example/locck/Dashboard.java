@@ -74,7 +74,7 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
         // Write a message to the database
         mAuth = FirebaseAuth.getInstance ();
         user = mAuth.getCurrentUser ().getUid ();
-        myref = FirebaseDatabase.getInstance ().getReference ();
+        myref = FirebaseDatabase.getInstance ().getReference ("Users");
 
         if(mAuth.getCurrentUser ()== null){
             finish ();;
@@ -107,6 +107,7 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
                     you_are_here.setVisibility (View.INVISIBLE);
 
                     User_address user_address = new User_address (landmark,addres);
+
                     FirebaseUser user = mAuth.getCurrentUser ();
 
                     myref.child (user.getUid ()).setValue (user_address);

@@ -96,6 +96,7 @@ public class Start_Activity extends AppCompatActivity {
                 loadingBar.setCanceledOnTouchOutside (false);
                 loadingBar.show ();
                 StoringImageToFirebase();
+
             }
     }
 
