@@ -225,6 +225,7 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
         return strAdd;
     }
 
+    /*Exit Button*/
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             exitByBackKey();
@@ -258,7 +259,6 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
                     }
                 })
                 .show();
-
     }
 
 }
