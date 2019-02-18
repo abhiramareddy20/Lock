@@ -20,10 +20,8 @@ android:orientation="vertical"
 
 
         <android.support.v7.widget.CardView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            card_view:cardBackgroundColor="@android:color/transparent"
-            card_view:cardElevation="0dp"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardElevation="0dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -37,13 +35,13 @@ android:orientation="vertical"
 
 
             <TextView
-                android:layout_marginTop="150dp"
-                android:textSize="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="150dp"
                 android:text="Request Successfull"
+                android:textAlignment="center"
                 android:textColor="@color/White"
-                android:textAlignment="center"/>
+                android:textSize="30dp" />
 
         </android.support.v7.widget.CardView>
 
@@ -57,7 +55,7 @@ android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/Button"
-        android:text="Clicke here"
+        android:text="Request Service"
         android:textColor="@color/White"/>
 
 </RelativeLayout>
