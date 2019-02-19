@@ -21,6 +21,7 @@ public class Pay_Half extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity (new Intent (Pay_Half.this,Request_success.class));
+                finish ();
             }
         });
     }

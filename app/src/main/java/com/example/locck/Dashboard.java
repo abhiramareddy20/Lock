@@ -228,6 +228,7 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
 
                 txtLat.setText(address + " " /*+ city + " " */);
 
+
             }
         } catch (IOException e) {
             // TODO Auto-generated catch block

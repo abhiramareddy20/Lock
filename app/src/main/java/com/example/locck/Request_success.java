@@ -64,6 +64,7 @@ public class Request_success extends AppCompatActivity {
                         if(task.isSuccessful ())
                         {
                             startActivity (new Intent (Request_success.this,Start_Activity.class));
+                            finish ();
                             Toast.makeText (Request_success.this, "Booking Confirmed", Toast.LENGTH_SHORT).show ();
                         }
                         else

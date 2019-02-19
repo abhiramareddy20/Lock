@@ -22,6 +22,7 @@ public class Pay_Full extends AppCompatActivity {
             public void onClick(View view) {
 
                 startActivity (new Intent (Pay_Full.this,Request_success.class));
+                finish ();
             }
         });
     }

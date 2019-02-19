@@ -122,11 +122,11 @@ public class Start_Activity extends AppCompatActivity {
                     Toast.makeText (Start_Activity.this, "Image Uploaded Successfully ", Toast.LENGTH_SHORT).show ();
                     Intent intent = new Intent (Start_Activity.this,Rating_activity.class);
                     startActivity (intent);
+                    finish ();
                 }else{
                     String msg = task.getException ().getMessage ();
                     Toast.makeText (Start_Activity.this, "Error occured" +msg , Toast.LENGTH_SHORT).show ();
                 }
-
             }
         });
     }
