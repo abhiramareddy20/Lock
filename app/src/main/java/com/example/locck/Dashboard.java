@@ -116,8 +116,7 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
                     myref.child (user.getUid ()).setValue (user_address);
 
                     Toast.makeText (Dashboard.this, "Address Saved", Toast.LENGTH_SHORT).show ();
-
-//Vijeth
+                    
                 }
 
             }
