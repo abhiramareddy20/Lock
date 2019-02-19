@@ -22,11 +22,13 @@
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:text="lat"
+        android:layout_marginTop="50dp"
         android:layout_below="@id/text"
         android:textColor="@color/White"
         android:textSize="30dp"
         android:gravity="center"
-        android:id="@+id/latlong"/>
+        android:id="@+id/latlong"
+        tools:ignore="UnknownId" />
 
     <EditText
         android:id="@+id/landmark"

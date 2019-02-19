@@ -48,7 +48,7 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
     protected LocationManager locationManager;
     protected LocationListener locationListener;
     protected Context context;
-    TextView txtLat, city,you_are_here;;
+    TextView txtLat, city,you_are_here;
     String lat;
     String provider;
     protected double latitude, longitude;
@@ -79,7 +79,7 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
         myref = FirebaseDatabase.getInstance ().getReference ("Users");
 
         if(mAuth.getCurrentUser ()== null){
-            finish ();;
+            finish ();
             startActivity (new Intent (this,Login.class));
         }
 
@@ -117,7 +117,7 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
 
                     Toast.makeText (Dashboard.this, "Address Saved", Toast.LENGTH_SHORT).show ();
 
-
+//Vijeth
                 }
 
             }
@@ -209,6 +209,7 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
 
         latitude = location.getLatitude();
         longitude = location.getLongitude();
+
 
         Log.e("latitude", "latitude--" + latitude);
 
