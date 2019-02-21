@@ -116,7 +116,7 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
                     myref.child (user.getUid ()).setValue (user_address);
 
                     Toast.makeText (Dashboard.this, "Address Saved", Toast.LENGTH_SHORT).show ();
-                    
+
                 }
 
             }
@@ -170,7 +170,7 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent (Dashboard.this, Book.class);
-                intent.putExtra ("image", R.drawable.locktype1);
+               // intent.putExtra ("image", R.drawable.locktype1);
                 startActivity (intent);
             }
         });
@@ -179,7 +179,7 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent (Dashboard.this, Book.class);
-                intent.putExtra ("image", R.drawable.locktype2);
+                //intent.putExtra ("image", R.drawable.locktype2);
                 startActivity (intent);
             }
         });
@@ -189,7 +189,7 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
             public void onClick(View view) {
 
                 Intent intent = new Intent (Dashboard.this, Book.class);
-                intent.putExtra ("image", R.drawable.locktype3);
+                //intent.putExtra ("image", R.drawable.locktype3);
                 startActivity (intent);
             }
         });
