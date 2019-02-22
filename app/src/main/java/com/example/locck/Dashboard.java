@@ -56,6 +56,7 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
     private FirebaseAuth mAuth;
     private String user;
     private DatabaseReference myref;
+    ImageView img;
 
     private ProgressDialog loadingbar;
     LinearLayout l1, l2, l3;
@@ -90,7 +91,15 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
         txtLat = (TextView) findViewById (R.id.latlong);
         userLandmark = (EditText)findViewById (R.id.landmark);
         loadingbar = new ProgressDialog (this);
+        img = (ImageView)findViewById (R.id.image1);
 
+        img.setOnClickListener (new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent (Dashboard.this,Book.class);
+                startActivity (i);
+            }
+        });
         btn.setOnClickListener (new View.OnClickListener () {
             @Override
             public void onClick(View view) {
@@ -166,14 +175,14 @@ public class Dashboard extends AppCompatActivity implements LocationListener {
         i3 = (ImageView) findViewById (R.id.image3);
 
 
-        l1.setOnClickListener (new View.OnClickListener () {
+        /*l1.setOnClickListener (new View.OnClickListener () {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent (Dashboard.this, Book.class);
                // intent.putExtra ("image", R.drawable.locktype1);
                 startActivity (intent);
             }
-        });
+        });*/
 
         l2.setOnClickListener (new View.OnClickListener () {
             @Override

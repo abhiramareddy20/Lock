@@ -40,14 +40,14 @@ public class Book extends AppCompatActivity {
 
 
         imgageView =(ImageView)findViewById (R.id.lock1);
-        Bundle bundle =getIntent ().getExtras ();
+       /* Bundle bundle =getIntent ().getExtras ();
         if(bundle!=null)
         {
              img = bundle.getInt ("image");
             imgageView.setImageResource (img);
 
         }
-
+*/
 
 
         b1 = (Button)findViewById (R.id.book);
